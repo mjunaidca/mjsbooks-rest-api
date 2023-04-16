@@ -22,61 +22,28 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+      <div className="mb-32 mt-10 md:mt-28 flex flex-col justify-center lg:mb-0 text-left">
+        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-50 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30">
           <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            MiddleWare
+            EndPoints
             <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
               -&gt;
             </span>
           </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
+          <ul
+            className={`${inter.className} m-0 text-gray-600 max-w-lg text-base sm:text-lg gap-6 list-outside`}
           >
-            /orders && /orders/:orderId
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30">
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Authenticated
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            GET /orders GET, PATCH, DELETE /orders/:orderId
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Public
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            GET /status GET /books GET /books/:bookId
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h2 className={`${inter.className} mb-3 text-2xl font-semibold`}>
-            Register Client
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p
-            className={`${inter.className} m-0 max-w-[30ch] text-sm opacity-50`}
-          >
-            POST /api-clients/
-          </p>
+            <li>GET /api/status - Check API status</li>
+            <li>GET /api/books - List books (filter: type, limit: 1-20)</li>
+            <li>GET /api/books/:bookId - Get book details</li>
+            <li>POST /api-clients/ - Register API client</li>
+            <li className="font-semibold m-2 mb-2">Middleware applied:</li>
+            <li>POST /orders - Submit a new order (bookId, customerName)</li>
+            <li>GET /orders - View all orders for a client</li>
+            <li>GET /orders/:orderId - View an existing order</li>
+            <li>PATCH /orders/:orderId - Update order (customerName)</li>
+            <li>DELETE /orders/:orderId - Delete an existing order</li>
+          </ul>
         </div>
       </div>
     </main>

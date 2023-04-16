@@ -1,32 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Middleware no Node JS
-// Create a seperate API and fetch in middleware
-// In middleware call self api and get the data
-
-// export async function middleware(request: NextRequest) {
-//     console.log('Middleware ran');
-
-//     console.log('Middleware ran')
-
-//     console.log(request.method)
-//     console.log(request.url)
-
-//     // const origin = request.headers.get('origin')
-//     // console.log(origin);
-
-//     return NextResponse.next()
-
-// }
-
-// export const config = {
-//     matcher: '/api/:path*'
-// }
-
-
-
 async function fetchAccessToken() {
-    const getAllTokens = await fetch('http://localhost:3000/api/accessToken', {
+    const getAllTokens = await fetch('https://mjsbooks-rest-api.vercel.app/api/accessToken', {
         cache: 'no-store'
     })
     const AllTokens = await getAllTokens.json()

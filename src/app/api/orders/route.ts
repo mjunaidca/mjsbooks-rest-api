@@ -70,7 +70,15 @@ export async function POST(request: NextRequest) {
         ssl: require,
     });
 
-    // const accessToken = request.headers.get('access_token')
+    // Check if the book with the given bookId exists
+    const book = await conn.unsafe(`
+    SELECT * FROM books WHERE id = ${bookId}
+    `);
+
+    if (book.length === 0) {
+        return NextResponse.json({ error: "Book not found." }, { status: 404 });
+    }
+
 
     // Get the access token from the Authorization header
     const authHeader = request.headers.get('Authorization');
@@ -80,7 +88,6 @@ export async function POST(request: NextRequest) {
     const accessToken = authHeader.slice(7);
 
     console.log("This is ACCESS TOKEN" + accessToken);
-
 
 
     // Verify the access token and retrieve the client id
@@ -97,8 +104,6 @@ export async function POST(request: NextRequest) {
 
     const client_id = client[0].id;
     console.log("Client ID: " + client_id);
-
-
 
 
     const result = await conn.unsafe
@@ -122,7 +127,7 @@ export async function POST(request: NextRequest) {
     }
 
 
-    return NextResponse.json(result)
+    return NextResponse.json(result[0])
 }
 
 

@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
   // If the client exists, return an error with a 409 status code
   if (clientExists.length > 0) {
-    return NextResponse.json('API client already registered. Try changing the values for clientEmail and clientName to something else.', {
+    return NextResponse.json('API client already registered. Try changing the values for clientEmail to something else.', {
       status: 409,
     });
   }

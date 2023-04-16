@@ -31,12 +31,12 @@ export async function GET(request: NextRequest, { params: { id } }: Props) {
 
     // console.log(result);
 
-    if (!result) {
-        throw new Error('Books Not Found')
+    if (result.length === 0) {
+        return NextResponse.json({ error: "Book Do Not Exist" }, { status: 404 })
     }
 
 
-    return NextResponse.json(result)
+    return NextResponse.json(result[0])
 }
 
 

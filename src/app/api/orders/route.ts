@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import postgres from "postgres";
 import { randomUUID } from "crypto";
+
+
+
 import { log } from "console";
 
 type PlaceOrder = {
@@ -92,8 +95,8 @@ export async function POST(request: NextRequest) {
 
     // Verify the access token and retrieve the client id
     const client = await conn.unsafe(`
-  SELECT id FROM clients WHERE access_token = '${accessToken}'
-`);
+            SELECT id FROM clients WHERE access_token = '${accessToken}'
+            `);
 
     console.log("CLIENT ID CALL" + client)
 

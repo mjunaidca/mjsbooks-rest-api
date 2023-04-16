@@ -6,10 +6,9 @@ async function fetchAccessToken() {
     // return NextResponse.json(AllTokens)
 
     return AllTokens.map(({ access_token }: any) => access_token);
-
 }
 
-export async function middleware(request: Request) {
+export async function middleware(request: NextRequest) {
 
     console.log('Middleware ran')
     const dbTokens = await fetchAccessToken();
@@ -20,7 +19,7 @@ export async function middleware(request: Request) {
 
     //browser verification
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return new NextResponse('Register Or Login To Access The Route', { status: 401 });
+        return new NextResponse('Unauthorizaed User', { status: 401 });
     }
 
     const accessToken = authHeader.slice(7);
@@ -37,5 +36,5 @@ export async function middleware(request: Request) {
 }
 
 export const config = {
-    matcher: '/api/orders/:path*'
+    matcher: ['/api/orders/:path*', '/api/accessToken']
 }

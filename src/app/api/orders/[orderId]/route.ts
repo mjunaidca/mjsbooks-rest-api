@@ -14,13 +14,13 @@ export async function GET(request: NextRequest, { params: { orderId } }: Props) 
     });
 
     try {
-        const authHeader = request.headers.get('Authorization');
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return NextResponse.json({ error: 'Invalid access token.' });
-        }
-        const accessToken = authHeader.slice(7);
+        // const authHeader = request.headers.get('Authorization');
+        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        //     return NextResponse.json({ error: 'Invalid access token.' });
+        // }
+        // const accessToken = authHeader.slice(7);
 
-        console.log("This is ACCESS TOKEN" + accessToken);
+        // console.log("This is ACCESS TOKEN" + accessToken);
 
         const result = await conn.unsafe(`
             SELECT * FROM orders WHERE id = '${orderId}'
@@ -50,13 +50,13 @@ export async function PATCH(request: NextRequest, { params: { orderId } }: Props
     });
 
     try {
-        const authHeader = request.headers.get('Authorization');
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return NextResponse.json({ error: 'Invalid access token.' });
-        }
-        const accessToken = authHeader.slice(7);
+        // const authHeader = request.headers.get('Authorization');
+        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        //     return NextResponse.json({ error: 'Invalid access token.' });
+        // }
+        // const accessToken = authHeader.slice(7);
 
-        console.log("This is ACCESS TOKEN" + accessToken);
+        // console.log("This is ACCESS TOKEN" + accessToken);
 
         const result = await conn.unsafe(`
             UPDATE orders 
@@ -82,13 +82,13 @@ export async function DELETE(request: NextRequest, { params: { orderId } }: Prop
     });
 
     try {
-        const authHeader = request.headers.get('Authorization');
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return NextResponse.json({ error: 'Invalid access token.' });
-        }
-        const accessToken = authHeader.slice(7);
+        // const authHeader = request.headers.get('Authorization');
+        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        //     return NextResponse.json({ error: 'Invalid access token.' });
+        // }
+        // const accessToken = authHeader.slice(7);
 
-        console.log("This is ACCESS TOKEN" + accessToken);
+        // console.log("This is ACCESS TOKEN" + accessToken);
 
         const result = await conn.unsafe(`
             DELETE FROM orders 

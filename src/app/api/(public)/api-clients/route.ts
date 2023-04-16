@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import postgres from "postgres";
 import { randomUUID } from "crypto";
+import jwt from "jsonwebtoken";
 
 type RegisterClient = {
   clientName?: string;
@@ -10,8 +11,12 @@ type RegisterClient = {
 
 export async function POST(request: NextRequest) {
 
+  const secretKey = 'your-secret-key'; // Replace this with your secret key
+
   const id = randomUUID();
-  const access_token = randomUUID();
+  // const access_token = randomUUID();
+  // Generate the access_token using JWT
+  const access_token = jwt.sign({ id }, secretKey, { expiresIn: '7d' }); // Set the token expiration time as needed (e.g., '7d' for 7 days)
 
   const data: RegisterClient = await request.json();
   const { clientName, clientEmail } = data;
@@ -57,6 +62,6 @@ export async function POST(request: NextRequest) {
 
 
   return NextResponse.json(result)
-}
+};
 
 

@@ -126,6 +126,11 @@ export async function POST(request: NextRequest) {
         throw new Error('Unable to Place Order API Error')
     }
 
+    if (result.length === 0) {
+        return NextResponse.json('No Books Ordered')
+    }
+
+
 
     return NextResponse.json(result[0])
 }

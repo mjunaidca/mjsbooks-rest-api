@@ -13,6 +13,17 @@ export async function GET(request: NextRequest) {
         ssl: require,
     });
 
+    // Check for invalid types
+    const existingTypes = await conn.unsafe(`SELECT type_name FROM book_types`);
+    const existingTypeNames = existingTypes.map(typeObj => typeObj.type_name);
+
+    for (const type of types) {
+        if (!existingTypeNames.includes(type)) {
+            return NextResponse.json({ error: `Invalid type: ${type}.` }, { status: 400 });
+        }
+    }
+
+    // Check for invalid limit
     const limit = rawLimit ? parseInt(rawLimit) : undefined;
     if (limit !== undefined && (isNaN(limit) || limit < 1 || limit > 20)) {
         return NextResponse.json(
@@ -33,8 +44,9 @@ export async function GET(request: NextRequest) {
         `);
 
     if (!result) {
-        throw new Error('Books Not Found')
+        return NextResponse.json({ error: 'Books Not Found' })
     }
+
 
 
     return NextResponse.json(result)

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import postgres from "postgres";
 import { randomUUID } from "crypto";
 import jwt from "jsonwebtoken";
-import { VerifyToken } from "../verifyClientId/route";
 
 
 type PlaceOrder = {
@@ -10,11 +9,10 @@ type PlaceOrder = {
     customerName?: string;
 }
 
-const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; // Replace this with your secret key
+const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; 
 
 
 export async function GET(request: NextRequest) {
-    // const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; // Replace this with your secret key
 
     const conn = postgres({
         ssl: require,
@@ -26,24 +24,6 @@ export async function GET(request: NextRequest) {
     }
     const accessToken = authHeader.slice(7);
 
-    // console.log("This is ACCESS TOKEN" + accessToken);
-
-
-    // Verify the access token and retrieve the client id
-    //     const client = await conn.unsafe(`
-    //   SELECT id FROM clients WHERE access_token = '${accessToken}'
-    // `);
-
-    //     console.log("CLIENT ID CALL" + client)
-
-    //     // Check if the access token is valid
-    //     if (client.length === 0) {
-    //         return NextResponse.json({ "error": 'Invalid client id.' });
-    //     }
-
-    //     const client_id = client[0].id;
-    //     console.log("Client ID: " + client_id);
-
     let client_id;
     try {
         // Verify the access token and retrieve the client id
@@ -53,27 +33,17 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Invalid access token." });
     }
 
-
-
     console.log("CLIENT ID CALL" + client_id);
 
-
     const result = await conn.unsafe
-        (`
-        SELECT * FROM orders WHERE client_id = '${client_id}'
-    `);
+        (`SELECT * FROM orders WHERE client_id = '${client_id}'`);
 
-
-    // console.log(result[0]);
-    console.log("TOKEN", accessToken);
-    console.log("TOKEN VERIFICATION", await VerifyToken(accessToken));
+    console.log(result[0]);
 
 
     if (!result) {
         throw new Error('Unable to Register API Client Not Found')
     }
-
-
     return NextResponse.json(result)
 
 
@@ -103,7 +73,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Book not found." }, { status: 404 });
     }
 
-
     // Get the access token from the Authorization header
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -113,6 +82,7 @@ export async function POST(request: NextRequest) {
 
     console.log("This is ACCESS TOKEN" + accessToken);
 
+    // These commands were before the JWT TOKEN AUTHENTICATION
 
     // Verify the access token and retrieve the client id
     // const client = await conn.unsafe(`

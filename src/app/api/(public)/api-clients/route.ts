@@ -11,18 +11,22 @@ type RegisterClient = {
 
 export async function POST(request: NextRequest) {
 
-  const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; // Replace this with your secret key
+  const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw';
 
   const id = randomUUID();
+
   // const access_token = randomUUID();
+
   // Generate the access_token using JWT - We are encoding id as we will later decode it in /api/orders
   const access_token = jwt.sign({ id }, secretKey, { expiresIn: '7d' }); // Set the token expiration time as needed (e.g., '7d' for 7 days)
 
   const data: RegisterClient = await request.json();
   const { clientName, clientEmail } = data;
 
-  const client_name = clientName;
-  const client_email = clientEmail;
+  // Check if the clientName field is missing or empty
+  if (!clientEmail || clientEmail.trim() === '') {
+    return NextResponse.json({ error: 'Missing or incorrect clientEmail field.' }, { status: 400 });
+  }
 
   const conn = postgres({
     ssl: require,
@@ -43,14 +47,14 @@ export async function POST(request: NextRequest) {
 
   const result = await conn.unsafe
     (`
-
-    INSERT INTO clients (id, client_name, client_email) VALUES(
+    INSERT INTO clients (id, client_name, client_email, access_token) VALUES(
       '${id}',
-      '${client_name}',
-      '${client_email}'
+      '${clientName}',
+      '${clientEmail}',
+      '${access_token}'
     )
+    RETURNING access_token
     `);
-  // RETURNING access_token
 
 
   console.log(result[0]);
@@ -58,7 +62,6 @@ export async function POST(request: NextRequest) {
   if (!result) {
     throw new Error('Unable to Register API Client Not Found')
   }
-
 
   return NextResponse.json({ "AccessToken:": access_token })
 };

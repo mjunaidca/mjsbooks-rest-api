@@ -14,9 +14,8 @@ export async function GET(request: NextRequest) {
         (`SELECT access_token from clients`)
 
     if (!tokenClients) {
-        throw new Error('There are No Registered Clients')
+        throw new Error('Invalidet Clients Registration!')
     }
-
 
     return NextResponse.json(tokenClients)
 }

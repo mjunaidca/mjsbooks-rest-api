@@ -14,13 +14,6 @@ export async function GET(request: NextRequest, { params: { orderId } }: Props) 
     });
 
     try {
-        // const authHeader = request.headers.get('Authorization');
-        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        //     return NextResponse.json({ error: 'Invalid access token.' });
-        // }
-        // const accessToken = authHeader.slice(7);
-
-        // console.log("This is ACCESS TOKEN" + accessToken);
 
         const result = await conn.unsafe(`
             SELECT * FROM orders WHERE id = '${orderId}'
@@ -45,18 +38,15 @@ export async function PATCH(request: NextRequest, { params: { orderId } }: Props
     const data = await request.json();
     const { customerName } = data;
 
+    if (!('customerName' in data) || customerName.trim() === '') {
+        return NextResponse.json({ error: 'Missing or incorrect customerName field.' }, { status: 400 });
+    }
+
     const conn = postgres({
         ssl: require,
     });
 
     try {
-        // const authHeader = request.headers.get('Authorization');
-        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        //     return NextResponse.json({ error: 'Invalid access token.' });
-        // }
-        // const accessToken = authHeader.slice(7);
-
-        // console.log("This is ACCESS TOKEN" + accessToken);
 
         const result = await conn.unsafe(`
             UPDATE orders 
@@ -82,18 +72,14 @@ export async function DELETE(request: NextRequest, { params: { orderId } }: Prop
     });
 
     try {
-        // const authHeader = request.headers.get('Authorization');
-        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        //     return NextResponse.json({ error: 'Invalid access token.' });
-        // }
-        // const accessToken = authHeader.slice(7);
-
-        // console.log("This is ACCESS TOKEN" + accessToken);
-
         const result = await conn.unsafe(`
             DELETE FROM orders 
             WHERE id = '${orderId}';
         `);
+
+        if (result.length === 0) {
+            return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+        }
 
         console.log(result[0]);
 

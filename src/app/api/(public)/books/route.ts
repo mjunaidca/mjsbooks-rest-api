@@ -14,12 +14,16 @@ export async function GET(request: NextRequest) {
     });
 
     // Check for invalid types
+    // returns  an array of objects.
     const existingTypes = await conn.unsafe(`SELECT type_name FROM book_types`);
+
+    // array contains only the book type names as strings.
     const existingTypeNames = existingTypes.map(typeObj => typeObj.type_name);
 
+    // For each type in the array checks if the existingTypeNames array includes it or its invalid book type.
     for (const type of types) {
         if (!existingTypeNames.includes(type)) {
-            return NextResponse.json({ error: `Invalid type: ${type}.` }, { status: 400 });
+            return NextResponse.json({ error: `Invalid book type: ${type}.` }, { status: 400 });
         }
     }
 

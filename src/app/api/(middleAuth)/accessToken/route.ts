@@ -5,17 +5,23 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
 
+    console.log('CALLED ACCESS TOKEN ran');
+
     const conn = postgres({
         ssl: require,
     });
 
+    const ClientsId = await conn.unsafe
+        (`SELECT id FROM clients`)
 
-    const tokenClients = await conn.unsafe
-        (`SELECT access_token from clients`)
-
-    if (!tokenClients) {
-        throw new Error('Invalidet Clients Registration!')
+    if (!ClientsId) {
+        throw new Error('There are No Registered Clients')
     }
 
-    return NextResponse.json(tokenClients)
+    const ExtractClientIds = ClientsId;
+
+    const ArrayclientIds: string[] = ExtractClientIds.map(({ id }: any) => id);
+
+    return NextResponse.json(ArrayclientIds); // Use NextResponse.json() to return JSON data
 }
+

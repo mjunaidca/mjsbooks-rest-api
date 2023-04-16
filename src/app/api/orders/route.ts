@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     const result = await conn.unsafe
         (`SELECT * FROM orders WHERE client_id = '${client_id}'`);
 
-    console.log(result[0]);
+    // console.log(result[0]);
 
 
     if (!result) {

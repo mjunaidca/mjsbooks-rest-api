@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import postgres from "postgres";
 import { jwtVerify, SignJWT } from "jose";
 
+export const runtime = 'experimental-edge';
+
 interface UserJwtPayload {
     jti: string;
     iat: number;
@@ -29,26 +31,26 @@ export const verifyAuth = async (token: string) => {
     }
 }
 
-export async function GET(request: NextRequest) {
+// export async function GET(request: NextRequest) {
 
-    const conn = postgres({
-        ssl: require,
-    });
+//     const conn = postgres({
+//         ssl: require,
+//     });
 
 
-    const tokenClients = await conn.unsafe
-        (`SELECT id from clients`)
+//     const tokenClients = await conn.unsafe
+//         (`SELECT id from clients`)
 
-    if (!tokenClients) {
-        throw new Error('There are No Registered Clients')
-    }
+//     if (!tokenClients) {
+//         throw new Error('There are No Registered Clients')
+//     }
 
-    const clientIds = await tokenClients;
+//     const clientIds = await tokenClients;
 
-    const ArrayclientIds: string[] = clientIds.map(({ id }: any) => id);
+//     const ArrayclientIds: string[] = clientIds.map(({ id }: any) => id);
 
-    return NextResponse.json(ArrayclientIds); // Use NextResponse.json() to return JSON data
-}
+//     return NextResponse.json(ArrayclientIds); // Use NextResponse.json() to return JSON data
+// }
 
 
 // export const VerifyAuth = async (token: string) {

@@ -15,6 +15,10 @@ async function fetchClientIds() {
     return jsonData;
 }
 
+// Function to check if a given token is authorized
+function isAuthorized(jetTokenId: string, dbClientIds: string[]): boolean {
+    return dbClientIds.some(clientId => clientId === jetTokenId);
+}
 
 export async function middleware(request: NextRequest) {
 
@@ -33,23 +37,23 @@ export async function middleware(request: NextRequest) {
     const accessToken = authHeader.slice(7);
 
     const jetToken = await verifyAuth(accessToken)
-
     console.log('jetToken', jetToken)
 
-    // console.log('CHECK THE COMPARISION', !dbTokens.includes(accessToken))
+    // Check if the id in jetToken matches any of the dbClientIds
+    const authorized = isAuthorized(jetToken.id, dbClientIds);
 
-    // if (!dbTokens.includes(accessToken)) {
-    //     return new NextResponse("Unable to verify kindly Register", { status: 401 });
-    // }
+    // If authorized, proceed with the request
+    if (authorized) {
+        return NextResponse.next();
+    }
 
-    return NextResponse.next();
+    // If not authorized, return a 401 Unauthorized response
+    return NextResponse.json({ message: 'Unauthorized User' }, { status: 401 });
 }
 
 export const config = {
-    matcher: '/api/orders/:path*'
+    matcher: ['/api/orders/:path*', '/api/accessToken', '/api/jwtClientIdTest']
 }
-
-// '/api/accessToken', '/api/jwtClientIdTest'
 
 
 

@@ -116,14 +116,14 @@ export async function POST(request: NextRequest) {
           '${client_name}',
           ${1}
         )
-        RETURNING id
+        RETURNING id AS OrderId
         `);
 
 
     console.log(result[0]);
 
     if (!result) {
-        throw new Error('Unable to Register API Client Not Found')
+        throw new Error('Unable to Place Order API Error')
     }
 
 

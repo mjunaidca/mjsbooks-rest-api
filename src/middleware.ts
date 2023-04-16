@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 async function fetchAccessToken() {
-    const getAllTokens = await fetch('https://mjsbooks-rest-api.vercel.app/api/accessToken', {
-        cache: 'no-store'
-    })
+    const getAllTokens = await fetch('https://mjsbooks-rest-api.vercel.app/api/accessToken')
     const AllTokens = await getAllTokens.json()
     // return NextResponse.json(AllTokens)
 

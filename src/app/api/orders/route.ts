@@ -1,17 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import postgres from "postgres";
 import { randomUUID } from "crypto";
+import jwt from "jsonwebtoken";
+import { VerifyToken } from "../verifyClientId/route";
 
-
-
-import { log } from "console";
 
 type PlaceOrder = {
     bookId?: number;
     customerName?: string;
 }
 
+const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; // Replace this with your secret key
+
+
 export async function GET(request: NextRequest) {
+    // const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; // Replace this with your secret key
+
     const conn = postgres({
         ssl: require,
     });
@@ -22,23 +26,37 @@ export async function GET(request: NextRequest) {
     }
     const accessToken = authHeader.slice(7);
 
-    console.log("This is ACCESS TOKEN" + accessToken);
+    // console.log("This is ACCESS TOKEN" + accessToken);
 
 
     // Verify the access token and retrieve the client id
-    const client = await conn.unsafe(`
-  SELECT id FROM clients WHERE access_token = '${accessToken}'
-`);
+    //     const client = await conn.unsafe(`
+    //   SELECT id FROM clients WHERE access_token = '${accessToken}'
+    // `);
 
-    console.log("CLIENT ID CALL" + client)
+    //     console.log("CLIENT ID CALL" + client)
 
-    // Check if the access token is valid
-    if (client.length === 0) {
-        return NextResponse.json({ "error": 'Invalid client id.' });
+    //     // Check if the access token is valid
+    //     if (client.length === 0) {
+    //         return NextResponse.json({ "error": 'Invalid client id.' });
+    //     }
+
+    //     const client_id = client[0].id;
+    //     console.log("Client ID: " + client_id);
+
+    let client_id;
+    try {
+        // Verify the access token and retrieve the client id
+        const decoded = jwt.verify(accessToken, secretKey) as { id: string };
+        client_id = decoded.id;
+    } catch (error) {
+        return NextResponse.json({ error: "Invalid access token." });
     }
 
-    const client_id = client[0].id;
-    console.log("Client ID: " + client_id);
+
+
+    console.log("CLIENT ID CALL" + client_id);
+
 
     const result = await conn.unsafe
         (`
@@ -46,7 +64,10 @@ export async function GET(request: NextRequest) {
     `);
 
 
-    console.log(result[0]);
+    // console.log(result[0]);
+    console.log("TOKEN", accessToken);
+    console.log("TOKEN VERIFICATION", await VerifyToken(accessToken));
+
 
     if (!result) {
         throw new Error('Unable to Register API Client Not Found')
@@ -94,19 +115,30 @@ export async function POST(request: NextRequest) {
 
 
     // Verify the access token and retrieve the client id
-    const client = await conn.unsafe(`
-            SELECT id FROM clients WHERE access_token = '${accessToken}'
-            `);
+    // const client = await conn.unsafe(`
+    //         SELECT id FROM clients WHERE access_token = '${accessToken}'
+    //         `);
 
-    console.log("CLIENT ID CALL" + client)
+    // console.log("CLIENT ID CALL" + client)
 
-    // Check if the access token is valid
-    if (client.length === 0) {
-        return NextResponse.json({ "error": 'Invalid client id.' });
+    // // Check if the access token is valid
+    // if (client.length === 0) {
+    //     return NextResponse.json({ "error": 'Invalid client id.' });
+    // }
+
+    // const client_id = client[0].id;
+    // console.log("Client ID: " + client_id);
+
+    let client_id;
+    try {
+        // Verify the access token and retrieve the client id
+        const decoded = jwt.verify(accessToken, secretKey) as { id: string };
+        client_id = decoded.id;
+    } catch (error) {
+        return NextResponse.json({ error: "Invalid access token." });
     }
 
-    const client_id = client[0].id;
-    console.log("Client ID: " + client_id);
+    console.log("CLIENT ID CALL" + client_id);
 
 
     const result = await conn.unsafe
@@ -124,6 +156,7 @@ export async function POST(request: NextRequest) {
 
 
     console.log(result[0]);
+
 
     if (!result) {
         throw new Error('Unable to Place Order API Error')

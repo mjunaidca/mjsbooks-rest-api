@@ -11,11 +11,11 @@ type RegisterClient = {
 
 export async function POST(request: NextRequest) {
 
-  const secretKey = 'your-secret-key'; // Replace this with your secret key
+  const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; // Replace this with your secret key
 
   const id = randomUUID();
   // const access_token = randomUUID();
-  // Generate the access_token using JWT
+  // Generate the access_token using JWT - We are encoding id as we will later decode it in /api/orders
   const access_token = jwt.sign({ id }, secretKey, { expiresIn: '7d' }); // Set the token expiration time as needed (e.g., '7d' for 7 days)
 
   const data: RegisterClient = await request.json();
@@ -44,14 +44,13 @@ export async function POST(request: NextRequest) {
   const result = await conn.unsafe
     (`
 
-    INSERT INTO clients (id, client_name, client_email, access_token) VALUES(
+    INSERT INTO clients (id, client_name, client_email) VALUES(
       '${id}',
       '${client_name}',
-      '${client_email}',
-      '${access_token}'
+      '${client_email}'
     )
-    RETURNING access_token
-        `);
+    `);
+  // RETURNING access_token
 
 
   console.log(result[0]);
@@ -61,7 +60,7 @@ export async function POST(request: NextRequest) {
   }
 
 
-  return NextResponse.json(result)
+  return NextResponse.json({ "AccessToken:": access_token })
 };
 
 

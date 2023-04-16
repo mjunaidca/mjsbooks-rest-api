@@ -72,14 +72,19 @@ export async function DELETE(request: NextRequest, { params: { orderId } }: Prop
     });
 
     try {
-        const result = await conn.unsafe(`
-            DELETE FROM orders 
-            WHERE id = '${orderId}';
-        `);
+        // Check if order exists
+        const orderResult = await conn.unsafe(
+            `SELECT * FROM orders WHERE id = '${orderId}'`
+        );
 
-        if (result.length === 0) {
-            return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+        if (orderResult.length === 0) {
+            return NextResponse.json({ error: `Order with ID ${orderId} not found` }, { status: 404 });
         }
+
+        // Delete the order
+        const result = await conn.unsafe(
+            `DELETE FROM orders WHERE id = '${orderId}'`
+        );
 
         console.log(result[0]);
 

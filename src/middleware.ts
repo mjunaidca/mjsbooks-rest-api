@@ -4,7 +4,7 @@ import { verifyAuth } from './app/api/(middleAuth)/jwtClientIdTest/route';
 
 
 async function fetchClientIds() {
-    const getClientIds = await fetch('https://mjsbooks-rest-api-mjunaidca.vercel.app/api/accessToken');
+    const getClientIds = await fetch('https://mjsbooks-rest-api.vercel.app/api/accessToken');
 
     if (!getClientIds.ok) {
         console.error('Error fetching client IDs:', getClientIds.statusText);

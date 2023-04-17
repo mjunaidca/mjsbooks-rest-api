@@ -9,10 +9,15 @@ type PlaceOrder = {
     customerName?: string;
 }
 
-const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw'; 
+const secretKey = process.env.JWT_SECRET_KEY;
+
 
 
 export async function GET(request: NextRequest) {
+
+    if (!secretKey) {
+        return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    }
 
     const conn = postgres({
         ssl: require,
@@ -98,6 +103,10 @@ export async function POST(request: NextRequest) {
 
     // const client_id = client[0].id;
     // console.log("Client ID: " + client_id);
+
+    if (!secretKey) {
+        return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+    }
 
     let client_id;
     try {

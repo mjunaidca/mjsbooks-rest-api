@@ -4,7 +4,7 @@ import { verifyAuth } from './app/api/(middleAuth)/jwtClientIdTest/route';
 
 
 async function fetchClientIds() {
-    const getClientIds = await fetch('http://localhost:3000/api/accessToken');
+    const getClientIds = await fetch('https://mjsbooks-rest-api-mjunaidca.vercel.app/api/accessToken');
 
     if (!getClientIds.ok) {
         console.error('Error fetching client IDs:', getClientIds.statusText);
@@ -12,7 +12,10 @@ async function fetchClientIds() {
     }
 
     const jsonData = await getClientIds.json();
+    // return NextResponse.json({ jsonData })
     return jsonData;
+    // return new (JSON.stringify(jsonData))
+
 }
 
 // Function to check if a given token is authorized
@@ -29,18 +32,22 @@ export async function middleware(request: NextRequest) {
     const authHeader = request.headers.get('Authorization');
     // console.log('authHeader', authHeader)
 
-    //browser verification
+    // browser verification
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return NextResponse.json({ message: 'Unauthorizaed User' }, { status: 401 });
     }
 
     const accessToken = authHeader.slice(7);
+    // const accessToken = authHeader.slice(7);
 
     const jetToken = await verifyAuth(accessToken)
+    // const jetToken = await verifyAuth('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM0NTJmMzEwLTcxYWYtNDUzZC04YTg1LWNkZTIwZjlmNDY0MiIsImlhdCI6MTY4MTY4Nzg0MiwiZXhwIjoxNjgyMjkyNjQyfQ.gJHj9poJfCLTih2qh_TbgW4yrL3poPA4kZsRbWTmHPU')
     console.log('jetToken', jetToken)
 
     // Check if the id in jetToken matches any of the dbClientIds
-    const authorized = isAuthorized(jetToken.id, dbClientIds);
+
+    const authorized = Array.isArray(dbClientIds) && isAuthorized(jetToken.id, dbClientIds);
+    // const authorized = isAuthorized(jetToken.id, dbClientIds);
 
     // If authorized, proceed with the request
     if (authorized) {

@@ -9,7 +9,7 @@ interface UserJwtPayload {
     id?: any
 }
 
-const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw';
+const secretKey = process.env.JWT_SECRET_KEY;
 
 export const getJwTSecretKey = () => {
     const secret = secretKey;

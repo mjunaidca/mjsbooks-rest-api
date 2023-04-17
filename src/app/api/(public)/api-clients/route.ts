@@ -11,7 +11,11 @@ type RegisterClient = {
 
 export async function POST(request: NextRequest) {
 
-  const secretKey = 'DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw';
+  const secretKey = process.env.JWT_SECRET_KEY;
+
+  if (!secretKey) {
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  }
 
   const id = randomUUID();
 
@@ -47,17 +51,15 @@ export async function POST(request: NextRequest) {
 
   const result = await conn.unsafe
     (`
-    INSERT INTO clients (id, client_name, client_email, access_token) VALUES(
+    INSERT INTO clients (id, client_name, client_email) VALUES(
       '${id}',
       '${clientName}',
-      '${clientEmail}',
-      '${access_token}'
+      '${clientEmail}'
     )
-    RETURNING access_token
     `);
 
 
-  console.log(result[0]);
+  // console.log(result[0]);
 
   if (!result) {
     throw new Error('Unable to Register API Client Not Found')

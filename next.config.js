@@ -8,6 +8,7 @@ const nextConfig = {
     PGDATABASE: "neondb",
     PGUSER: "mr.junaid.ca",
     PGPASSWORD: "Of8jtYhgeH4C",
+    JWT_SECRET_KEY: "DbxHHxIAVxgl3dVzut6pmPFUPCIre5FcuEa828VVMqw",
   },
 };
 

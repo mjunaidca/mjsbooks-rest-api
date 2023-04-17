@@ -12,13 +12,10 @@ async function fetchClientIds() {
     }
 
     const jsonData = await getClientIds.json();
-    // return NextResponse.json({ jsonData })
     return jsonData;
-    // return new (JSON.stringify(jsonData))
-
 }
 
-// Function to check if a given token is authorized
+// Function to check if a given JWT token is authorized
 function isAuthorized(jetTokenId: string, dbClientIds: string[]): boolean {
     return dbClientIds.some(clientId => clientId === jetTokenId);
 }

@@ -13,6 +13,15 @@ export async function GET(request: NextRequest, { params: { orderId } }: Props) 
         ssl: require,
     });
 
+    //  // Get the access token from the Authorization header
+    //  const authHeader = request.headers.get('Authorization');
+    //  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //      return NextResponse.json({ error: 'Invalid access token.' });
+    //  }
+    //  const accessToken = authHeader.slice(7);
+
+    //  console.log("This is ACCESS TOKEN" + accessToken);
+
     try {
 
         const result = await conn.unsafe(`
@@ -46,6 +55,15 @@ export async function PATCH(request: NextRequest, { params: { orderId } }: Props
         ssl: require,
     });
 
+    //    // Get the access token from the Authorization header
+    //    const authHeader = request.headers.get('Authorization');
+    //    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //        return NextResponse.json({ error: 'Invalid access token.' });
+    //    }
+    //    const accessToken = authHeader.slice(7);
+
+    //    console.log("This is ACCESS TOKEN" + accessToken);
+
     try {
 
         const result = await conn.unsafe(`
@@ -70,6 +88,15 @@ export async function DELETE(request: NextRequest, { params: { orderId } }: Prop
     const conn = postgres({
         ssl: require,
     });
+
+    // Get the access token from the Authorization header
+    //  const authHeader = request.headers.get('Authorization');
+    //  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //      return NextResponse.json({ error: 'Invalid access token.' });
+    //  }
+    //  const accessToken = authHeader.slice(7);
+
+    //  console.log("This is ACCESS TOKEN" + accessToken);
 
     try {
         // Check if order exists

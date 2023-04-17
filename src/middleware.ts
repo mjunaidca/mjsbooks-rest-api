@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { verifyAuth } from './app/api/(middleAuth)/jwtClientIdTest/route';
+import { verifyAuth } from './app/lib/verifyAuth';
 
 
 async function fetchClientIds() {
-    const getClientIds = await fetch('https://mjsbooks-rest-api.vercel.app/api/accessToken');
+    const getClientIds = await fetch('https://mjsbooks-rest-api.vercel.app/api/jwtClientIdTest');
 
     if (!getClientIds.ok) {
         console.error('Error fetching client IDs:', getClientIds.statusText);
@@ -56,7 +56,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/api/orders/:path*', '/api/accessToken', '/api/jwtClientIdTest']
+    matcher: ['/api/orders/:path*', '/api/jwtClientIdTest']
 }
 
 

@@ -62,6 +62,11 @@ export async function POST(request: NextRequest) {
     const data: PlaceOrder = await request.json();
     const { bookId, customerName } = data;
 
+    
+    if (!('customerName' in data)) {
+        return NextResponse.json({ error: 'Incorrect customerName field.' }, { status: 400 });
+    }
+
     const book_id = bookId;
     const client_name = customerName;
 
